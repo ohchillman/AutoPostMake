@@ -92,6 +92,19 @@ sudo a2enmod rewrite
 sudo systemctl restart apache2
 ```
 
+**Важно**: Убедитесь, что DocumentRoot указывает на директорию `public` внутри вашего проекта. Если вы видите ошибку "Not Found", проверьте следующее:
+
+1. Правильность пути в конфигурации Apache (должен быть `/var/www/autopostmake/public`)
+2. Наличие файлов в директории public (особенно index.php)
+3. Права доступа к файлам (www-data должен иметь доступ на чтение)
+4. Активацию модуля rewrite (`sudo a2enmod rewrite`)
+5. Перезапуск Apache после внесения изменений (`sudo systemctl restart apache2`)
+
+Для отладки проблем с Apache проверьте журналы ошибок:
+```bash
+sudo tail -f /var/log/apache2/error.log
+```
+
 ### 5. Клонирование репозитория
 
 ```bash
@@ -129,13 +142,20 @@ cd /var/www/autopostmake
 sudo php scripts/init_db.php
 ```
 
-### 8. Настройка прав доступа
+### 8. Настройка прав доступа и директории для логов
 
 ```bash
 # Установка правильных прав доступа
 sudo chown -R www-data:www-data /var/www/autopostmake
 sudo chmod -R 755 /var/www/autopostmake
+
+# Создание директории для логов с правами на запись
+sudo mkdir -p /var/www/autopostmake/logs
+sudo chown -R www-data:www-data /var/www/autopostmake/logs
+sudo chmod 777 /var/www/autopostmake/logs
 ```
+
+**Важно**: Скрипты парсера и рерайтера сохраняют логи в директорию `logs/`. Если эта директория не существует или у пользователя нет прав на запись в неё, скрипты будут выдавать ошибку `Permission denied`.
 
 ### 9. Настройка cron для периодического парсинга
 
