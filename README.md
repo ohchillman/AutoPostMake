@@ -27,8 +27,19 @@ sudo apt upgrade -y
 sudo apt install -y apache2 mysql-server php php-mysql php-curl php-mbstring php-xml php-zip
 
 # Установка Python и необходимых пакетов
-sudo apt install -y python3 python3-pip
-sudo pip3 install requests beautifulsoup4 mysql-connector-python feedparser
+sudo apt install -y python3 python3-full python3-pip python3-venv
+
+# Вариант 1: Установка пакетов через apt (рекомендуется)
+sudo apt install -y python3-requests python3-bs4 python3-mysql.connector python3-feedparser
+
+# Вариант 2: Создание виртуального окружения (если пакеты недоступны через apt)
+python3 -m venv /var/www/autopostmake/venv
+source /var/www/autopostmake/venv/bin/activate
+pip install requests beautifulsoup4 mysql-connector-python feedparser
+
+# Примечание: при использовании виртуального окружения необходимо 
+# обновить пути к Python в скриптах запуска или использовать полный путь
+# к интерпретатору Python из виртуального окружения
 ```
 
 ### 3. Настройка MySQL
